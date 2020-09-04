@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/drkchiloll/rgnets"
+	"github.com/ApogeeNetworking/rgnets"
 	"github.com/subosito/gotenv"
 )
 
