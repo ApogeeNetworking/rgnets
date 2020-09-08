@@ -48,14 +48,13 @@ type DhcpLeaseOptions struct {
 
 // GetDhcpLease ...
 func (c *Client) GetDhcpLease(options DhcpLeaseOptions) (DhcpLease, error) {
-	endpoint := fmt.Sprintf("/dhcp_leases/index.json?api_key=%s", c.apiKey)
-	switch {
-	case options.Hostname != "":
-		endpoint += "&hostname=" + options.Hostname
-	case options.IP != "":
-		endpoint += "&ip=" + options.IP
-	}
+	endpoint := "/dhcp_leases/index.json"
 	req, err := http.NewRequest("GET", c.BaseURL+endpoint, nil)
+	q := req.URL.Query()
+	q.Add("api_key", c.apiKey)
+	// Add Query String for Weird Hostnames to be Encoded Properly
+	q.Add("hostname", options.Hostname)
+	req.URL.RawQuery = q.Encode()
 	if err != nil {
 		return DhcpLease{}, err
 	}
