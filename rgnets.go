@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 )
@@ -71,16 +70,13 @@ func (c *Client) GetDhcpLease(options DhcpLeaseOptions) (DhcpLease, error) {
 	return leases[0], nil
 }
 
-// DhcpRelease ...
-func (c *Client) DhcpRelease(leaseID int64) {
+// ReleaseDHCP ...
+func (c *Client) ReleaseDHCP(leaseID int64) {
 	endpoint := fmt.Sprintf("/dhcp_leases/destroy/%v.xml?api_key=%s", leaseID, c.apiKey)
 	req, err := http.NewRequest("POST", c.BaseURL+endpoint, nil)
 	if err != nil {
-		log.Fatalf("%v", err)
 	}
-	res, err := c.http.Do(req)
+	_, err = c.http.Do(req)
 	if err != nil {
-		log.Fatalf("%v", err)
 	}
-	fmt.Println(res)
 }
