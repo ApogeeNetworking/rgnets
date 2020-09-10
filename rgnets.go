@@ -71,12 +71,15 @@ func (c *Client) GetDhcpLease(options DhcpLeaseOptions) (DhcpLease, error) {
 }
 
 // ReleaseDHCP ...
-func (c *Client) ReleaseDHCP(leaseID int64) {
+func (c *Client) ReleaseDHCP(leaseID int64) error {
 	endpoint := fmt.Sprintf("/dhcp_leases/destroy/%v.xml?api_key=%s", leaseID, c.apiKey)
 	req, err := http.NewRequest("POST", c.BaseURL+endpoint, nil)
 	if err != nil {
+		return fmt.Errorf("%v", err)
 	}
 	_, err = c.http.Do(req)
 	if err != nil {
+		return fmt.Errorf("%v", err)
 	}
+	return nil
 }
